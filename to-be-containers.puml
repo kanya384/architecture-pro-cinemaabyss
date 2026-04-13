@@ -1,0 +1,78 @@
+@startuml
+title Диаграмма контейнеров To-Be «Кинобездна»
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+AddElementTag("gateway", $bgColor="#FFE6CC", $borderColor="#CC5500", $fontColor="#000000")
+AddElementTag("bff", $bgColor="#E1F5FE", $borderColor="#0288D1", $fontColor="#000000")
+AddElementTag("core", $bgColor="#E8F5E9", $borderColor="#388E3C", $fontColor="#000000")
+
+Person(user, "User", "Пользователь системы")
+System_Ext(PaymentsGateway, "Платежный шлюз")
+System_Ext(RecomendationSystem, "Рекомендательная система")
+System_Ext(RabbitMq, "Брокер сообщений (RabbitMq)")
+Rel(RabbitMq, RecomendationSystem, "Использует")
+
+
+System_Ext(mobileApp, "Мобильное приложение", "iOS/Android", "Пользовательский интерфейс")
+System_Ext(webApp, "Веб-приложение", "React SPA", "Браузерный клиент")
+System_Ext(smartTv, "Смарт ТВ", "Android TV/Google TV/Tizen/WebOS", "Браузерный клиент")
+
+Rel(user, mobileApp, "Использует")
+Rel(user, webApp, "Использует")
+Rel(user, smartTv, "Использует")
+
+
+Container_Boundary(KinoBezdnaSystem, "KinoBezdna System") {
+  Container(apiGateway, "Api Gateway", "Kong/Traefik/Nginx", $tags="gateway")
+
+  Rel(mobileApp, apiGateway, "Вызывает /api/mobile/*")
+  Rel(webApp, apiGateway, "Вызывает /api/web/*")
+  Rel(smartTv, apiGateway, "Вызывает /api/smart-tv/*")
+
+  Container(mobileBff, "Mobile BFF", "Java + Spring Boot", "MobileApps BFF", $tags="bff")
+  Container(webBff, "Web BFF", "Java + Spring Boot", "WebApp BFF", $tags="bff")
+  Container(smartBff, "SmartTVs BFF", "Java + Spring Boot", "BFF для SmartTV", $tags="bff")
+
+  Rel(apiGateway, mobileBff, "Маршрутизирует /api/mobile/*")
+  Rel(apiGateway, webBff, "Маршрутизирует api/web/*")
+  Rel(apiGateway, smartBff, "Маршрутизирует /api/smart-tv/*")
+
+
+  Container(UsersService, "Микросервис пользователей", "Java Spring")
+  Container(UsersDatabase, "UsersDatabase", "PostgreSQL", "Хранит Информацию о пользователях")
+  Rel(UsersService, UsersDatabase, "CRUD")
+  Rel(mobileBff, UsersService, "Вызывает")
+  Rel(webBff, UsersService, "Вызывает")
+  Rel(smartBff, UsersService, "Вызывает")
+
+  Container(MoviesService, "Микросервис фильмы", "Java Spring")
+  Container(MoviesDatabase, "MoviesDatabase", "PostgreSQL", "Хранит Информацию о фильмах")
+  Rel(MoviesService, MoviesDatabase, "CRUD")
+  Rel(mobileBff, MoviesService, "Вызывает")
+  Rel(webBff, MoviesService, "Вызывает")
+  Rel(smartBff, MoviesService, "Вызывает")
+  Rel(MoviesService, RabbitMq, "Отправка запросов")
+  Rel(RabbitMq, MoviesService, "Получение ответов")
+
+  Container(PaymentsService, "Микросервис платежей", "Java Spring")
+  Container(PaymentsDatabase, "PaymentsDatabase", "PostgreSQL", "Хранит транзакции")
+  Rel(PaymentsService, PaymentsDatabase, "CRUD")
+  Rel(mobileBff, PaymentsService, "Вызывает")
+  Rel(webBff, PaymentsService, "Вызывает")
+  Rel(smartBff, PaymentsService, "Вызывает")
+  Rel(PaymentsService, PaymentsGateway, "Проведение платежа")
+
+  Container(SubscriptionsService, "Микросервис подписок", "Java Spring")
+  Container(SubscriptionsDatabase, "SubscriptionsDatabase", "PostgreSQL", "Хранит информацию о подписках")
+  Rel(SubscriptionsService, SubscriptionsDatabase, "CRUD")
+  Rel(mobileBff, SubscriptionsService, "Вызывает")
+  Rel(webBff, SubscriptionsService, "Вызывает")
+  Rel(smartBff, SubscriptionsService, "Вызывает")
+
+}
+
+
+@enduml

@@ -22,8 +22,8 @@ spec:
     spec:
       containers:
       - name: monolith
-        image:  ghcr.io/db-exp/cinemaabysstest/monolith:latest
-        imagePullPolicy: Always
+        image:  ghcr.io/kanya384/architecture-pro-cinemaabyss/monolith:sha-5f084d6
+        imagePullPolicy: Always #Never нужно для запуска на mackbook на arm процессоре, для linux/amd64 вернуть  Always
         ports:
         - containerPort: 8080
         env:
