@@ -1,0 +1,15 @@
+server:
+  port: ${PORT}
+spring:
+  application:
+    name: proxy
+MONOLITH_URL: http://monolith:8080
+MOVIES_SERVICE_URL: http://movies-service:8081
+EVENTS_SERVICE_URL: http://events-service:8082
+GRADUAL_MIGRATION: true
+MOVIES_MIGRATION_PERCENT: 50
+
+management:
+  endpoints:
+    web:
+      base-path: /
