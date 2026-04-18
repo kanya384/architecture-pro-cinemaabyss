@@ -5,7 +5,7 @@ global:
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJodHRwczovL2doY3IuaW8iOiB7CgkJCSJhdXRocyI6ICJhMkZ1ZVdFek9EUTZaMmh3WDBST1IwUXhSME5rYWtwa2NUbDVhWE15Y2pWaVFsSTNaR00xTWtsa1J6SjBlRVp0WXdvPSIKCQl9Cgl9LAoJImNyZWRzU3RvcmUiOiAiZGVza3RvcCIsCgkiY3VycmVudENvbnRleHQiOiAiZGVza3RvcC1saW51eCIKfQo=
 # Database configuration
 database:
   host: postgres
@@ -33,9 +33,9 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
+    repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/monolith
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -53,17 +53,17 @@ monolith:
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/proxy-service
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 200m
+      memory: 256Mi
   service:
     port: 80
     targetPort: 8000
@@ -73,17 +73,17 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
+    repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/movies-service
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 200m
+      memory: 256Mi
   service:
     port: 8081
     targetPort: 8081
@@ -93,17 +93,17 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
+    repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/events-service
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 200m
+      memory: 256Mi
   service:
     port: 8082
     targetPort: 8082
@@ -177,6 +177,14 @@ ingress:
           pathType: Prefix
           service: events-service
           port: 8082
+        - path: /api/movies
+          pathType: Prefix
+          service: movies-service
+          port: 8081
+        - path: /api
+          pathType: Prefix
+          service: monolith
+          port: 8080
 
 # Application configuration
 config:

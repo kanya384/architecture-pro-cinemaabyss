@@ -22,8 +22,8 @@ spec:
     spec:
       containers:
       - name: movies-service
-        image: ghcr.io/db-exp/cinemaabysstest/movies-service:latest
-        imagePullPolicy: Always
+        image: ghcr.io/kanya384/architecture-pro-cinemaabyss/movies-service:sha-793d689
+        imagePullPolicy: Always #Never нужно для запуска на mackbook на arm процессоре (предварительно стянуть образ с флагом docker pull --platform linux/amd64 и выполнить minikube image load), для linux/amd64 вернуть  Always
         ports:
         - containerPort: 8081
         env:
@@ -38,11 +38,11 @@ spec:
             name: cinemaabyss-secrets
         resources:
           limits:
-            cpu: "300m"
-            memory: "256Mi"
+            cpu: "500m"
+            memory: "512Mi"
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "200m"
+            memory: "256Mi"
         readinessProbe:
           httpGet:
             path: /api/movies/health

@@ -554,7 +554,7 @@
                   "",
                   "pm.test(\"Status is true\", function () {",
                   "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.status).to.be.true;",
+                  "    pm.expect(jsonData.status).to.equal(\"UP\");",
                   "});"
                 ],
                 "type": "text/javascript"

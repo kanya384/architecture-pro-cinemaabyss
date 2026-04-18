@@ -30,4 +30,4 @@ spec:
               number: {{ .port }}
       {{- end }}
   {{- end }}
-{{- end }}
+  {{- end }}
