@@ -34,7 +34,7 @@ monolith:
   enabled: true
   image:
     repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/monolith
-    tag: sha-5f084d6
+    tag: latest
     pullPolicy: IfNotPresent
   replicas: 1
   resources:
@@ -54,7 +54,7 @@ proxyService:
   enabled: true
   image:
     repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/proxy-service
-    tag: sha-51b7f88
+    tag: latest
     pullPolicy: IfNotPresent
   replicas: 1
   resources:
@@ -74,7 +74,7 @@ moviesService:
   enabled: true
   image:
     repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/movies-service
-    tag: sha-793d689
+    tag: latest
     pullPolicy: IfNotPresent
   replicas: 1
   resources:
@@ -94,7 +94,7 @@ eventsService:
   enabled: true
   image:
     repository: ghcr.io/kanya384/architecture-pro-cinemaabyss/events-service
-    tag: sha-5f084d6
+    tag: latest
     pullPolicy: IfNotPresent
   replicas: 1
   resources:
